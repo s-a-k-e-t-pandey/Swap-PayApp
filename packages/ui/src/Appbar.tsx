@@ -9,11 +9,7 @@ interface AppbarProps {
     onSignout: any
 }
 
-export const Appbar = ({
-    user,
-    onSignin,
-    onSignout
-}: AppbarProps) => {
+export const Appbar = ({ user, onSignin, onSignout }: AppbarProps) => {
     return <div className="flex justify-between border-b px-4">
         <div className="text-lg flex flex-col justify-center">
             PayTM
