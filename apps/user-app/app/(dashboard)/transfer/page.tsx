@@ -31,19 +31,11 @@ const getBalance = async () => {
 
 async function getOnRampTransaction(){
     const session = await getServerSession(authOptions);
-    const userId = session?.user?.id;
-
-    if (!userId) {
-        return {
-            amount: 0,
-            locked: 0
-        };
-    }
     const txns = await db.onRampTransaction.findMany({
         where: {
-            userId: Number(userId)
+            userId: Number(session?.user?.id)
         }
-    })
+    });
     return txns.map(t => ({
         time: t.startTime,
         amount: t.amount,
@@ -57,19 +49,19 @@ export default async function(){
     const transactions = await getOnRampTransaction();
 
     return <div className="w-screen">
-        <div className="text-4xl text-[#6a51a6] pt-8 mb-8 font-bold">
-            transfer
-        </div> 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 p-4">
-            <div>
-                <AddMoneyCard />
-            </div>
-            <div>
-                <BalanceCard amount={balance.amount} locked={balance.locked} />
-                <div className="pt-4">
-                    <OnRampTransactions transactions={transactions} />
-                </div>
+    <div className="text-4xl text-[#6a51a6] pt-8 mb-8 font-bold">
+        Transfer
+    </div>
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 p-4">
+        <div>
+            <AddMoneyCard />
+        </div>
+        <div>
+            <BalanceCard amount={balance.amount} locked={balance.locked} />
+            <div className="pt-4">
+                <OnRampTransactions transactions={transactions} />
             </div>
         </div>
     </div>
+</div>
 }
