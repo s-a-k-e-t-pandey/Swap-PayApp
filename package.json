@@ -5,7 +5,12 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "db:generate": "cd packages/db && npx prisma generate && cd ../..",
+    "start-user-app": "cd ./apps/user-app && npm run start",
+    "build:user-app": "turbo build --filter=./apps/user-app",
+    "start-bank-webhook": "cd ./apps/bank-webhook && npm run start",
+    "build:bank-webhook": "turbo build --filter=./apps/bank-webhook"
   },
   "devDependencies": {
     "prettier": "^3.2.5",
