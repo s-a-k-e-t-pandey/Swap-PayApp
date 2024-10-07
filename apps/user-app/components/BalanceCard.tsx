@@ -14,11 +14,11 @@ export const BalanceCard = ({amount, locked}: {amount: number; locked: number})=
 
 const BalanceBlock = ({topic, value}: {topic: string, value: number}) =>{
     return <div className="flex justify-between border-b border-slate-300 pb-2">
-    <div>
-        {topic}
+        <div>
+            {topic}
+        </div>
+        <div>
+            {value} INR
+        </div>
     </div>
-    <div>
-        {value} INR
-    </div>
-</div>
 }
