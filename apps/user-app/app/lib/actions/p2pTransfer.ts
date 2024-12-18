@@ -1,7 +1,7 @@
 "use server"
 import { getServerSession } from "next-auth";
 import authOptions from "../auth";
-import prisma from "../../../../../packages/db/src";
+import db from '@repo/db/client'
 
 export async function p2pTransfer(to: string, amount: number) {
     const session = await getServerSession(authOptions);
@@ -11,7 +11,7 @@ export async function p2pTransfer(to: string, amount: number) {
             message: "Error while sending"
         }
     }
-    const toUser = await prisma.user.findFirst({
+    const toUser = await db.user.findFirst({
         where: {
             number: to
         }
@@ -22,7 +22,7 @@ export async function p2pTransfer(to: string, amount: number) {
             message: "User not found"
         }
     }
-    await prisma.$transaction(async (tx) => {
+    await db.$transaction(async (tx) => {
         const fromBalance = await tx.balance.findUnique({
             where: { userId: Number(from) },
           });
@@ -40,12 +40,12 @@ export async function p2pTransfer(to: string, amount: number) {
             data: { amount: { increment: amount } },
           });
 
-          await tx.p2pTransfer.create({
+          await tx.p2PTransfer.create({
             data: {
-                fromUserId: Number(from),
-                toUserId: toUser.id,
+                fromUser: session?.user?.email,
+                toUser: toUser.number,
                 amount,
-                timestamp: new Date()
+                timeStamp: new Date()
             }
           })
     });

@@ -1,18 +1,19 @@
 {
   "name": "@repo/db",
-  "version": "1.0.0",
-  "main": "index.js",
+  "version": "0.0.0",
   "dependencies": {
-    "@prisma/client": "^5.16.2",
-    "bcrypt": "^5.1.1"
-  },
-  "devDependencies": {
-    "prisma": "^5.16.2"
-  },
-  "exports": {
-    "./client": "./index.ts"
+    "next-auth": "^4.24.7"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
+  },
+  "devDependencies": {
+    "@prisma/client": "^5.12.1",
+    "i": "^0.3.7",
+    "npm": "^10.5.0",
+    "prisma": "^5.12.1"
+  },
+  "exports": {
+    "./client": "./src/index.ts"
   }
 }

@@ -1,39 +1,32 @@
 "use server"
 import { getServerSession } from "next-auth"
 import authOptions from "../auth"
-import prisma from "../../../../../packages/db/src"
+import db from '@repo/db/client'
 
+export const createOnRampTransaction = async (provider: string, amount: number) => {
+    const session = await getServerSession(authOptions)
 
-export async function createOnrampTransaction(provider: string, amount: number) {
-    try{
-        const session = await getServerSession(authOptions)
-        if(!session?.user || !session.user?.id){
-            return {
-                msg: "Unauthentcated request"
-            }
-        }
-
-        const token = (Math.random() * 1000).toString();
-        const userId = session?.user?.id;
-        if (!userId) {
-            return {
-                message: "User not logged in"
-            }
-        }
-        await prisma.onRampTransaction.create({
-            data: {
-                userId: Number(userId), // 1
-                amount: amount,
-                status: "Processing",
-                startTime: new Date(),
-                provider,
-                token: token
-            }
-        })
+    if(!session?.user || !session.user?.id)
+    {
         return {
-            msg: "Done"
+            message: 'unauthenticated'
         }
-    }catch(e){
-        console.error("Error will Creating onRamp", e);
+    }
+
+    const token = (Math.random() * 1000).toString()
+    
+    await db.onRampTransaction.create({
+        data: {
+            provider,
+            status: "Processing",
+            startTime: new Date(),
+            token,
+            userId: Number(session?.user?.id),
+            amount: amount * 100
+        }
+    })
+
+    return {
+        message: 'Done'
     }
 }
